@@ -1,9 +1,9 @@
 {
   "1": {
-    "status": "Not Started",
+    "status": "In Progress",
     "date": "Mar 24, 2026",
     "metric": "PSI",
-    "target": "Ã¢ÂÂ¥ 8 psi per 1000 RPM",
+    "target": "ÃÂ¢ÃÂÃÂ¥ 8 psi per 1000 RPM",
     "notes": "RPM-dependent; scaled from Kawasaki 650R data",
     "assigned": []
   },
@@ -26,7 +26,7 @@
   "4": {
     "status": "Not Started",
     "date": "",
-    "metric": "ÃÂ°C",
+    "metric": "ÃÂÃÂ°C",
     "target": "Within OEM safe range",
     "notes": "Monitor during on-engine runs",
     "assigned": []
@@ -35,7 +35,7 @@
     "status": "Not Started",
     "date": "",
     "metric": "L/min",
-    "target": "Matches design spec ÃÂ±5%",
+    "target": "Matches design spec ÃÂÃÂ±5%",
     "notes": "Driven by balancing shaft extension",
     "assigned": []
   },
@@ -67,7 +67,7 @@
     "status": "Not Started",
     "date": "",
     "metric": "Flow @ rated RPM",
-    "target": "Design spec ÃÂ±5%",
+    "target": "Design spec ÃÂÃÂ±5%",
     "notes": "Shaft extension drive interface",
     "assigned": []
   },
@@ -204,7 +204,7 @@
     "date": "",
     "metric": "Analytical model",
     "target": "Pressure > target under G",
-    "notes": "Led by N. Gonzalez Ã¢ÂÂ Vehicle Dynamics",
+    "notes": "Led by N. Gonzalez ÃÂ¢ÃÂÃÂ Vehicle Dynamics",
     "assigned": []
   },
   "27": {
@@ -219,7 +219,7 @@
     "status": "Not Started",
     "date": "",
     "metric": "% success metrics met",
-    "target": "Ã¢ÂÂ¥ 80% of metrics passed",
+    "target": "ÃÂ¢ÃÂÃÂ¥ 80% of metrics passed",
     "notes": "Present to mentor and internal stakeholders",
     "assigned": []
   },
