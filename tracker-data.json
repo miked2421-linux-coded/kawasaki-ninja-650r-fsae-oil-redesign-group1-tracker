@@ -1,0 +1,258 @@
+{
+  "1": {
+    "status": "In Progress",
+    "date": "",
+    "metric": "PSI",
+    "target": "≥ 8 psi per 1000 RPM",
+    "notes": "RPM-dependent; scaled from Kawasaki 650R data",
+    "assigned": []
+  },
+  "2": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "PSI",
+    "target": "> 30 psi",
+    "notes": "Key success metric from stakeholder requirements",
+    "assigned": []
+  },
+  "3": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "PSI under lateral G",
+    "target": "> 10 psi sustained",
+    "notes": "Skidpad / endurance conditions",
+    "assigned": []
+  },
+  "4": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "°C",
+    "target": "Within OEM safe range",
+    "notes": "Monitor during on-engine runs",
+    "assigned": []
+  },
+  "5": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "L/min",
+    "target": "Matches design spec ±5%",
+    "notes": "Driven by balancing shaft extension",
+    "assigned": []
+  },
+  "6": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Visual / sensor",
+    "target": "No cavitation / starvation",
+    "notes": "Internal baffle / ramp effectiveness",
+    "assigned": []
+  },
+  "7": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Pressure / visual test",
+    "target": "Zero leaks",
+    "notes": "Post-assembly; all TIG welds and ported fittings",
+    "assigned": []
+  },
+  "8": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Foam visual observation",
+    "target": "No aeration",
+    "notes": "Pump oil through reservoir, observe at outlet",
+    "assigned": []
+  },
+  "9": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Flow @ rated RPM",
+    "target": "Design spec ±5%",
+    "notes": "Shaft extension drive interface",
+    "assigned": []
+  },
+  "10": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Time to rated PSI (sec)",
+    "target": "< 3 sec",
+    "notes": "Confirms system primes quickly",
+    "assigned": []
+  },
+  "11": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "PSI variation %",
+    "target": "No drop > 10%",
+    "notes": "Endurance simulation run",
+    "assigned": []
+  },
+  "12": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "PSI under lateral G",
+    "target": "> 10 psi / no starvation",
+    "notes": "Primary FSAE failure mode validation",
+    "assigned": []
+  },
+  "13": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "PSI stability over event",
+    "target": "No fluctuation events",
+    "notes": "Longitudinal + lateral combined loading",
+    "assigned": []
+  },
+  "14": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "mm vs. stock pan",
+    "target": "> 10 mm reduction",
+    "notes": "Fabricated sheet aluminum pan",
+    "assigned": []
+  },
+  "15": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "kg added",
+    "target": "< 10 kg added",
+    "notes": "Includes reservoir, pump, lines, brackets",
+    "assigned": []
+  },
+  "16": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "USD",
+    "target": "< $2,500",
+    "notes": "Track all components and fabrication costs",
+    "assigned": []
+  },
+  "17": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Pressure ripple + visual",
+    "target": "< 5% pressure variation",
+    "notes": "Reservoir internal ramp/baffle function",
+    "assigned": []
+  },
+  "18": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Pressure drop event",
+    "target": "Zero starvation events",
+    "notes": "Cornering cases modeled by N. Gonzalez",
+    "assigned": []
+  },
+  "19": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Noise / pressure ripple",
+    "target": "No cavitation",
+    "notes": "Inspect inlet line sizing and routing",
+    "assigned": []
+  },
+  "20": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Torque to spec",
+    "target": "All fittings to spec",
+    "notes": "All AN fittings and threaded ports",
+    "assigned": []
+  },
+  "21": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "No coolant/oil cross-leak",
+    "target": "Zero cross-contamination",
+    "notes": "O-ring / gasket sealing surface inspection",
+    "assigned": []
+  },
+  "22": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "mm TIR",
+    "target": "Within balance spec",
+    "notes": "Dynamic balance after installation",
+    "assigned": []
+  },
+  "23": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "No leaks at tilt angle",
+    "target": "Pass FSAE inspection",
+    "notes": "Oil must be sealed per FSAE rules",
+    "assigned": []
+  },
+  "24": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "CAD sign-off",
+    "target": "Dr. Ortiz / B. Sisk approved",
+    "notes": "Share via Teams; weekly meeting review",
+    "assigned": []
+  },
+  "25": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "C. Rodriguez feedback",
+    "target": "All parts deemed machinable",
+    "notes": "CNC, TIG weld, press brake processes",
+    "assigned": []
+  },
+  "26": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Analytical model",
+    "target": "Pressure > target under G",
+    "notes": "Led by N. Gonzalez – Vehicle Dynamics",
+    "assigned": []
+  },
+  "27": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Build milestone",
+    "target": "All 5 major components fitted",
+    "notes": "Adapter plate, shaft ext., oil pan, reservoir, brackets",
+    "assigned": []
+  },
+  "28": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "% success metrics met",
+    "target": "≥ 80% of metrics passed",
+    "notes": "Present to mentor and internal stakeholders",
+    "assigned": []
+  },
+  "29": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Change log entries",
+    "target": "All issues documented",
+    "notes": "CAD revisions tracked by M. Diez",
+    "assigned": []
+  },
+  "30": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "All KPIs checked",
+    "target": "100% success metrics met",
+    "notes": "Pressure, weight, cost, leak, FSAE compliance",
+    "assigned": []
+  },
+  "31": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Empirical data + docs",
+    "target": "Meets S. Cohen criteria",
+    "notes": "Data-driven; failure mode analysis included",
+    "assigned": []
+  },
+  "32": {
+    "status": "Not Started",
+    "date": "",
+    "metric": "Deliverable",
+    "target": "On-time submission",
+    "notes": "Managed via Microsoft Teams shared folder",
+    "assigned": []
+  }
+}
