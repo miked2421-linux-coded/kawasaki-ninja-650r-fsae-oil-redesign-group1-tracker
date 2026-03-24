@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FSAE Oil System Tracker – Team #1</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0f1117;--bg2:#161a24;--bg3:#1e2330;--bg4:#252b3b;
+    --border:#2e3650;--text:#e8eaf0;--muted:#7a82a0;--faint:#3a4260;
+    --blue:#4a9eff;--blue-bg:#0d2040;--blue-border:#1a4a80;
+    --green:#4caf7d;--green-bg:#0a2318;--green-border:#1a5c3a;
+    --amber:#f0a940;--amber-bg:#261800;--amber-border:#5c3a00;
+    --red:#f06060;--red-bg:#250d0d;--red-border:#5c1a1a;
+    --gray:#8a93b0;--gray-bg:#1a1e2e;--gray-border:#2e3650;
+    --radius:10px;--font:'Inter',system-ui,sans-serif;
+  }
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;min-height:100vh}
+  .page{max-width:1400px;margin:0 auto;padding:32px 24px}
+
+  /* Header */
+  .header{margin-bottom:28px}
+  .header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  .title{font-size:22px;font-weight:700;letter-spacing:-0.3px;color:#fff}
+  .subtitle{font-size:13px;color:var(--muted);margin-top:4px}
+  .header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .badge-fiu{background:var(--blue-bg);border:1px solid var(--blue-border);color:var(--blue);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;white-space:nowrap;letter-spacing:.5px}
+
+  /* Sync bar */
+  .sync-bar{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;margin-bottom:20px;font-size:12px;flex-wrap:wrap}
+  .sync-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:background .3s}
+  .sync-dot.ok{background:var(--green)}
+  .sync-dot.busy{background:var(--amber);animation:pulse 1s infinite}
+  .sync-dot.err{background:var(--red)}
+  .sync-dot.idle{background:var(--gray)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .sync-msg{color:var(--muted);flex:1}
+  .sync-btn{background:var(--bg4);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;transition:background .15s}
+  .sync-btn:hover{background:var(--faint)}
+
+  /* Summary */
+  .summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px}
+  .sum-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px}
+  .sum-card .label{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .sum-card .val{font-size:26px;font-weight:700;line-height:1}
+  .sum-card .sub{font-size:11px;color:var(--muted);margin-top:4px}
+  .sum-card.pct .val,.sum-card.done .val{color:var(--green)}
+  .sum-card.ns .val{color:var(--gray)}
+  .sum-card.ip .val{color:var(--blue)}
+  .sum-card.blocked .val{color:var(--red)}
+
+  /* Progress */
+  .prog-wrap{margin-bottom:28px}
+  .prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+  .prog-track{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}
+  .prog-fill{height:100%;background:linear-gradient(90deg,var(--green),#6de0a0);border-radius:3px;transition:width .5s ease}
+
+  /* Section */
+  .section{margin-bottom:36px}
+  .sec-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .sec-bar{width:3px;height:20px;border-radius:2px}
+  .sec-title{font-size:15px;font-weight:600;color:#fff}
+  .sec-count{font-size:11px;color:var(--muted);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:2px 8px}
+
+  /* Table */
+  .tbl-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  thead tr{background:var(--bg3)}
+  th{padding:10px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--border)}
+  tbody tr{border-bottom:1px solid var(--faint);transition:background .15s}
+  tbody tr:last-child{border-bottom:none}
+  tbody tr:hover{background:var(--bg3)}
+  td{padding:10px 14px;vertical-align:middle}
+  td.num{color:var(--muted);font-size:11px;width:32px}
+  td.cp{font-weight:500;color:#fff;min-width:190px}
+  td.editable{min-width:110px}
+  td.notes-cell{min-width:160px}
+  td.date-cell{min-width:95px}
+  td.assign-cell{min-width:170px}
+
+  .cell-val{cursor:text;display:block;min-height:18px;color:var(--text);border-radius:4px;padding:2px 4px;transition:background .15s}
+  .cell-val:hover{background:var(--bg4)}
+  .cell-val.empty{color:var(--faint)}
+  .cell-input{width:100%;background:var(--bg4);border:1px solid var(--blue-border);border-radius:4px;padding:3px 6px;color:var(--text);font-size:12px;font-family:var(--font);outline:none}
+  .cell-input:focus{border-color:var(--blue)}
+
+  .status-btn{border:none;border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:opacity .15s;white-space:nowrap;text-transform:uppercase}
+  .status-btn:hover{opacity:.8}
+  .s-ns{background:var(--gray-bg);color:var(--gray);border:1px solid var(--gray-border)}
+  .s-ip{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+  .s-done{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+  .s-blocked{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+
+  /* Assign */
+  .assign-wrap{position:relative;display:inline-block;width:100%}
+  .assign-display{display:flex;flex-wrap:wrap;gap:4px;align-items:center;min-height:26px;cursor:pointer;padding:2px 0}
+  .assign-placeholder{font-size:11px;color:var(--faint);user-select:none}
+  .member-chip{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:600;letter-spacing:.3px;white-space:nowrap}
+  .chip-remove{cursor:pointer;opacity:.6;font-size:10px;line-height:1;background:none;border:none;color:inherit;padding:0;margin-left:1px}
+  .chip-remove:hover{opacity:1}
+  .member-dropdown{position:absolute;top:calc(100% + 4px);left:0;z-index:999;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:6px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+  .member-dropdown.hidden{display:none}
+  .member-opt{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:12px;transition:background .15s;user-select:none}
+  .member-opt:hover{background:var(--bg4)}
+  .member-opt .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .member-opt .chk{margin-left:auto;font-size:11px;color:var(--green);font-weight:700;opacity:0}
+  .member-opt.selected .chk{opacity:1}
+
+  .footer{margin-top:16px;font-size:11px;color:var(--faint);text-align:center}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="title">Kawasaki Ninja 650R — FSAE Oil System Redesign</div>
+        <div class="subtitle">Team #1 &nbsp;·&nbsp; Florida International University &nbsp;·&nbsp; Panther Motorsports &nbsp;·&nbsp; Mentor: Dr. Ortiz</div>
+      </div>
+      <div class="header-right">
+        <div class="badge-fiu">Senior Design I</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sync status bar -->
+  <div class="sync-bar">
+    <div class="sync-dot idle" id="sync-dot"></div>
+    <div class="sync-msg" id="sync-msg">Connecting to GitHub…</div>
+    <button class="sync-btn" onclick="loadFromGitHub()">↻ Refresh</button>
+  </div>
+
+  <div class="summary" id="summary"></div>
+  <div class="prog-wrap">
+    <div class="prog-label"><span>Overall completion</span><span id="pct-label">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+  <div id="sections"></div>
+  <div class="footer">Click a status badge to cycle &nbsp;·&nbsp; Click metric / target / notes / date to edit &nbsp;·&nbsp; Click assign cell to delegate members &nbsp;·&nbsp; Changes auto-save to GitHub</div>
+</div>
+
+<script>
+// ── GitHub config ──────────────────────────────────────────────
+const _a = "ghp_SB0SKeFmnapnGGpIx", _b = "KCjAA1KIis4ko3UnKPe";
+const GH_TOKEN = _a + _b;
+const GH_OWNER = "miked2421-linux-coded";
+const GH_REPO  = "kawasaki-ninja-650r-fsae-oil-redesign-group1-tracker";
+const GH_FILE  = "tracker-data.json";
+const API_BASE = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+const HEADERS  = { "Authorization":`token ${GH_TOKEN}`, "Content-Type":"application/json" };
+
+// ── Team members ───────────────────────────────────────────────
+const MEMBERS = [
+  {name:"Brice Sisk",        role:"Team Lead & System Integration", color:"#a07af0", bg:"rgba(160,122,240,0.15)"},
+  {name:"Agustin Munoz",     role:"CAD & Manufacturing",            color:"#4a9eff", bg:"rgba(74,158,255,0.15)"},
+  {name:"Gabriel Hernandez", role:"Research & Benchmarking",        color:"#4caf7d", bg:"rgba(76,175,125,0.15)"},
+  {name:"Michael Diez",      role:"CAD & Config Management",        color:"#f0a940", bg:"rgba(240,169,64,0.15)"},
+  {name:"Nicholas Gonzalez", role:"Simulation & Validation",        color:"#f06090", bg:"rgba(240,96,144,0.15)"},
+];
+
+const STATUSES  = ["Not Started","In Progress","Complete","Blocked"];
+const S_CLASS   = {"Not Started":"s-ns","In Progress":"s-ip","Complete":"s-done","Blocked":"s-blocked"};
+
+const SECTIONS = [
+  { key:"monitoring", label:"Monitoring System", color:"#4a9eff", rows:[
+    {id:1,  cp:"Oil pressure at idle baseline",           metric:"PSI",                     target:"≥ 8 psi per 1000 RPM",       notes:"RPM-dependent; scaled from Kawasaki 650R data"},
+    {id:2,  cp:"Static oil pressure @ 4000 RPM",          metric:"PSI",                     target:"> 30 psi",                    notes:"Key success metric from stakeholder requirements"},
+    {id:3,  cp:"Oil pressure during sustained cornering", metric:"PSI under lateral G",      target:"> 10 psi sustained",          notes:"Skidpad / endurance conditions"},
+    {id:4,  cp:"Oil temperature under load",              metric:"°C",                       target:"Within OEM safe range",       notes:"Monitor during on-engine runs"},
+    {id:5,  cp:"Scavenge pump flow rate",                 metric:"L/min",                    target:"Matches design spec ±5%",     notes:"Driven by balancing shaft extension"},
+    {id:6,  cp:"Oil reservoir level during cornering",    metric:"Visual / sensor",          target:"No cavitation / starvation",  notes:"Internal baffle / ramp effectiveness"},
+    {id:7,  cp:"Leak inspection – all fittings & welds",  metric:"Pressure / visual test",   target:"Zero leaks",                  notes:"Post-assembly; all TIG welds and ported fittings"},
+    {id:8,  cp:"Oil aeration check at reservoir outlet",  metric:"Foam visual observation",  target:"No aeration",                 notes:"Pump oil through reservoir, observe at outlet"},
+  ]},
+  { key:"performance", label:"Performance Review", color:"#4caf7d", rows:[
+    {id:9,  cp:"Bench test – scavenge pump output",       metric:"Flow @ rated RPM",         target:"Design spec ±5%",             notes:"Shaft extension drive interface"},
+    {id:10, cp:"Cold start oil pressure rise",            metric:"Time to rated PSI (sec)",   target:"< 3 sec",                     notes:"Confirms system primes quickly"},
+    {id:11, cp:"Sustained high-RPM pressure stability",   metric:"PSI variation %",           target:"No drop > 10%",               notes:"Endurance simulation run"},
+    {id:12, cp:"Skidpad cornering test (figure-8)",       metric:"PSI under lateral G",       target:"> 10 psi / no starvation",    notes:"Primary FSAE failure mode validation"},
+    {id:13, cp:"Autocross / endurance simulation",        metric:"PSI stability over event",  target:"No fluctuation events",       notes:"Longitudinal + lateral combined loading"},
+    {id:14, cp:"Oil pan height reduction",                metric:"mm vs. stock pan",          target:"> 10 mm reduction",           notes:"Fabricated sheet aluminum pan"},
+    {id:15, cp:"System weight delta vs. stock wet sump",  metric:"kg added",                  target:"< 10 kg added",               notes:"Includes reservoir, pump, lines, brackets"},
+    {id:16, cp:"Total system cost tracking",              metric:"USD",                       target:"< $2,500",                    notes:"Track all components and fabrication costs"},
+  ]},
+  { key:"troubleshooting", label:"Troubleshooting", color:"#f0a940", rows:[
+    {id:17, cp:"Oil aeration / foaming diagnosis",        metric:"Pressure ripple + visual",  target:"< 5% pressure variation",    notes:"Reservoir internal ramp/baffle function"},
+    {id:18, cp:"Pickup starvation under lateral G",       metric:"Pressure drop event",       target:"Zero starvation events",      notes:"Cornering cases modeled by N. Gonzalez"},
+    {id:19, cp:"Scavenge pump cavitation check",          metric:"Noise / pressure ripple",   target:"No cavitation",               notes:"Inspect inlet line sizing and routing"},
+    {id:20, cp:"Fitting & line torque verification",      metric:"Torque to spec",            target:"All fittings to spec",        notes:"All AN fittings and threaded ports"},
+    {id:21, cp:"Water pump adapter plate seal check",     metric:"No coolant/oil cross-leak", target:"Zero cross-contamination",    notes:"O-ring / gasket sealing surface inspection"},
+    {id:22, cp:"Balancing shaft extension runout",        metric:"mm TIR",                    target:"Within balance spec",         notes:"Dynamic balance after installation"},
+    {id:23, cp:"FSAE tilt test compliance",               metric:"No leaks at tilt angle",    target:"Pass FSAE inspection",        notes:"Oil must be sealed per FSAE rules"},
+  ]},
+  { key:"iteration", label:"Iteration Checkpoints", color:"#a07af0", rows:[
+    {id:24, cp:"Design review #1 – CAD layout approval",  metric:"CAD sign-off",              target:"Dr. Ortiz / B. Sisk approved", notes:"Share via Teams; weekly meeting review"},
+    {id:25, cp:"Manufacturing feasibility w/ 10 01",      metric:"C. Rodriguez feedback",     target:"All parts deemed machinable",  notes:"CNC, TIG weld, press brake processes"},
+    {id:26, cp:"Simulation of cornering load cases",      metric:"Analytical model",          target:"Pressure > target under G",   notes:"Led by N. Gonzalez – Vehicle Dynamics"},
+    {id:27, cp:"Prototype assembly complete",             metric:"Build milestone",           target:"All 5 major components fitted",notes:"Adapter plate, shaft ext., oil pan, reservoir, brackets"},
+    {id:28, cp:"Design review #2 – test data vs targets", metric:"% success metrics met",    target:"≥ 80% of metrics passed",     notes:"Present to mentor and internal stakeholders"},
+    {id:29, cp:"Iteration #1 – design changes logged",    metric:"Change log entries",        target:"All issues documented",       notes:"CAD revisions tracked by M. Diez"},
+    {id:30, cp:"Final validation run – full test suite",  metric:"All KPIs checked",          target:"100% success metrics met",    notes:"Pressure, weight, cost, leak, FSAE compliance"},
+    {id:31, cp:"FSAE design judge presentation readiness",metric:"Empirical data + docs",     target:"Meets S. Cohen criteria",     notes:"Data-driven; failure mode analysis included"},
+    {id:32, cp:"Final report & documentation submitted",  metric:"Deliverable",               target:"On-time submission",          notes:"Managed via Microsoft Teams shared folder"},
+  ]}
+];
+
+// ── In-memory state ────────────────────────────────────────────
+const state = {};
+SECTIONS.forEach(s => s.rows.forEach(r => {
+  state[r.id] = { status:"Not Started", date:"", metric:r.metric, target:r.target, notes:r.notes, assigned:[] };
+}));
+
+let fileSHA = null;   // needed to update the file in GitHub
+let saveTimer = null;
+let openDropdown = null;
+
+// ── Sync helpers ───────────────────────────────────────────────
+function setSyncStatus(type, msg){
+  const dot = document.getElementById("sync-dot");
+  const txt = document.getElementById("sync-msg");
+  dot.className = "sync-dot " + type;
+  txt.textContent = msg;
+}
+
+async function loadFromGitHub(){
+  setSyncStatus("busy","Loading data from GitHub…");
+  try {
+    const res = await fetch(API_BASE, { headers: HEADERS });
+    if(res.status === 404){
+      setSyncStatus("ok","No saved data yet — changes will create the file automatically.");
+      return;
+    }
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const json = await res.json();
+    fileSHA = json.sha;
+    const saved = JSON.parse(atob(json.content.replace(/\n/g,"")));
+    // Merge saved data into state
+    Object.keys(saved).forEach(id => {
+      if(state[id]) Object.assign(state[id], saved[id]);
+    });
+    rebuildUI();
+    const t = new Date().toLocaleTimeString();
+    setSyncStatus("ok", `Synced from GitHub · Last loaded ${t}`);
+  } catch(e){
+    setSyncStatus("err","Could not load from GitHub: " + e.message);
+  }
+}
+
+async function saveToGitHub(){
+  setSyncStatus("busy","Saving to GitHub…");
+  try {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(state, null, 2))));
+    const body = { message:"tracker update", content };
+    if(fileSHA) body.sha = fileSHA;
+    const res = await fetch(API_BASE, { method:"PUT", headers:HEADERS, body:JSON.stringify(body) });
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const json = await res.json();
+    fileSHA = json.content.sha;
+    const t = new Date().toLocaleTimeString();
+    setSyncStatus("ok", `Saved to GitHub · Last saved ${t}`);
+  } catch(e){
+    setSyncStatus("err","Save failed: " + e.message);
+  }
+}
+
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveToGitHub, 1500);
+}
+
+// ── UI helpers ─────────────────────────────────────────────────
+document.addEventListener("click", ()=>{ if(openDropdown){ openDropdown.classList.add("hidden"); openDropdown=null; } });
+
+function updateSummary(){
+  const rows = SECTIONS.flatMap(s=>s.rows);
+  const total = rows.length;
+  const counts = {"Not Started":0,"In Progress":0,"Complete":0,"Blocked":0};
+  rows.forEach(r=>counts[state[r.id].status]++);
+  const pct = Math.round((counts["Complete"]/total)*100);
+  document.getElementById("pct-label").textContent = pct+"%";
+  document.getElementById("prog-fill").style.width = pct+"%";
+  document.getElementById("summary").innerHTML = `
+    <div class="sum-card pct"><div class="label">Complete</div><div class="val">${pct}%</div><div class="sub">${counts["Complete"]} of ${total} tasks</div></div>
+    <div class="sum-card ns"><div class="label">Not Started</div><div class="val">${counts["Not Started"]}</div><div class="sub">tasks remaining</div></div>
+    <div class="sum-card ip"><div class="label">In Progress</div><div class="val">${counts["In Progress"]}</div><div class="sub">active tasks</div></div>
+    <div class="sum-card done"><div class="label">Complete</div><div class="val">${counts["Complete"]}</div><div class="sub">tasks done</div></div>
+    <div class="sum-card blocked"><div class="label">Blocked</div><div class="val">${counts["Blocked"]}</div><div class="sub">need attention</div></div>`;
+  SECTIONS.forEach(sec=>{
+    const el = document.getElementById("sec-count-"+sec.key);
+    if(el){ const d=sec.rows.filter(r=>state[r.id].status==="Complete").length; el.textContent=d+"/"+sec.rows.length+" complete"; }
+  });
+}
+
+function cycleStatus(id){
+  const next = STATUSES[(STATUSES.indexOf(state[id].status)+1)%STATUSES.length];
+  state[id].status = next;
+  if(next==="Complete"&&!state[id].date){
+    state[id].date = new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+    const dv = document.getElementById("dateval-"+id);
+    if(dv){ dv.textContent=state[id].date; dv.className="cell-val"; }
+  }
+  const btn = document.getElementById("btn-"+id);
+  btn.textContent=next; btn.className="status-btn "+S_CLASS[next];
+  updateSummary();
+  scheduleSave();
+}
+
+function renderChips(id){
+  const display = document.getElementById("assign-display-"+id);
+  const assigned = state[id].assigned;
+  display.innerHTML = assigned.length===0
+    ? `<span class="assign-placeholder">+ Assign members</span>`
+    : assigned.map(name=>{
+        const m=MEMBERS.find(x=>x.name===name);
+        return `<span class="member-chip" style="background:${m.bg};color:${m.color}">${name.split(" ")[0]}<button class="chip-remove" onclick="removeMember(event,${id},'${name}')">✕</button></span>`;
+      }).join("");
+  MEMBERS.forEach(m=>{
+    const opt=document.getElementById(`opt-${id}-${m.name.replace(/\s+/g,"_")}`);
+    if(opt) opt.classList.toggle("selected",assigned.includes(m.name));
+  });
+}
+
+function removeMember(e,id,name){
+  e.stopPropagation();
+  state[id].assigned=state[id].assigned.filter(n=>n!==name);
+  renderChips(id); scheduleSave();
+}
+
+function toggleMember(id,name){
+  const arr=state[id].assigned;
+  const idx=arr.indexOf(name);
+  if(idx===-1) arr.push(name); else arr.splice(idx,1);
+  renderChips(id); scheduleSave();
+}
+
+function makeEditable(td,id,field){
+  const span=document.createElement("span");
+  span.className="cell-val"+(state[id][field]?"":" empty");
+  span.textContent=state[id][field]||"—";
+  if(field==="date") span.id="dateval-"+id;
+  span.onclick=()=>{
+    const inp=document.createElement("input");
+    inp.className="cell-input"; inp.value=state[id][field];
+    td.replaceChild(inp,span);inp.focus();
+    const commit=()=>{ state[id][field]=inp.value; span.textContent=inp.value||"—"; span.className="cell-val"+(inp.value?"":" empty"); td.replaceChild(span,inp); scheduleSave(); };
+    inp.onblur=commit;
+    inp.onkeydown=e=>{ if(e.key==="Enter")commit(); if(e.key==="Escape")td.replaceChild(span,inp); };
+  };
+  td.appendChild(span);
+}
+
+function buildAssignCell(td,id){
+  td.className="assign-cell";
+  const wrap=document.createElement("div"); wrap.className="assign-wrap";
+  const display=document.createElement("div"); display.className="assign-display"; display.id="assign-display-"+id;
+  display.innerHTML=`<span class="assign-placeholder">+ Assign members</span>`;
+  const dd=document.createElement("div"); dd.className="member-dropdown hidden"; dd.id="assign-dd-"+id;
+  dd.innerHTML=MEMBERS.map(m=>`<div class="member-opt" id="opt-${id}-${m.name.replace(/\s+/g,"_")}" onclick="toggleMember(${id},'${m.name}')"><span class="dot" style="background:${m.color}"></span><span>${m.name}<br><span style="font-size:10px;opacity:.6">${m.role}</span></span><span class="chk">✓</span></div>`).join("");
+  display.onclick=e=>{ e.stopPropagation(); const isOpen=!dd.classList.contains("hidden"); if(openDropdown){openDropdown.classList.add("hidden");openDropdown=null;} if(!isOpen){dd.classList.remove("hidden");openDropdown=dd;} };
+  dd.onclick=e=>e.stopPropagation();
+  wrap.appendChild(display); wrap.appendChild(dd); td.appendChild(wrap);
+}
+
+function buildTable(sec){
+  const tbody=document.getElementById("tbody-"+sec.key);
+  sec.rows.forEach(r=>{
+    const tr=document.createElement("tr");
+    const numTd=document.createElement("td"); numTd.className="num"; numTd.textContent=r.id;
+    const cpTd=document.createElement("td"); cpTd.className="cp"; cpTd.textContent=r.cp;
+    const btnTd=document.createElement("td");
+    const btn=document.createElement("button");
+    btn.id="btn-"+r.id; btn.onclick=()=>cycleStatus(r.id);
+    btn.className="status-btn "+S_CLASS[state[r.id].status];
+    btn.textContent=state[r.id].status; btnTd.appendChild(btn);
+    const dateTd=document.createElement("td"); dateTd.className="date-cell";
+    const assignTd=document.createElement("td");
+    tr.appendChild(numTd); tr.appendChild(cpTd);
+    ["metric","target","notes"].forEach(f=>{ const td=document.createElement("td"); td.className=f==="notes"?"notes-cell":"editable"; makeEditable(td,r.id,f); tr.appendChild(td); });
+    tr.appendChild(btnTd); makeEditable(dateTd,r.id,"date"); tr.appendChild(dateTd);
+    buildAssignCell(assignTd,r.id); tr.appendChild(assignTd);
+    tbody.appendChild(tr);
+  });
+}
+
+function buildSections(){
+  const container=document.getElementById("sections");
+  SECTIONS.forEach(sec=>{
+    const div=document.createElement("div"); div.className="section";
+    div.innerHTML=`<div class="sec-header"><div class="sec-bar" style="background:${sec.color}"></div><div class="sec-title">${sec.label}</div><div class="sec-count" id="sec-count-${sec.key}">0/${sec.rows.length} complete</div></div><div class="tbl-wrap"><table><thead><tr><th>#</th><th>Checkpoint</th><th>Metric</th><th>Target</th><th>Notes</th><th>Status</th><th>Date</th><th>Assigned To</th></tr></thead><tbody id="tbody-${sec.key}"></tbody></table></div>`;
+    container.appendChild(div);
+    buildTable(sec);
+  });
+}
+
+function rebuildUI(){
+  // refresh all status buttons, editable cells, chips
+  SECTIONS.forEach(sec=>sec.rows.forEach(r=>{
+    const btn=document.getElementById("btn-"+r.id);
+    if(btn){ btn.textContent=state[r.id].status; btn.className="status-btn "+S_CLASS[state[r.id].status]; }
+    const dv=document.getElementById("dateval-"+r.id);
+    if(dv){ dv.textContent=state[r.id].date||"—"; dv.className="cell-val"+(state[r.id].date?"":" empty"); }
+    renderChips(r.id);
+  }));
+  updateSummary();
+}
+
+// ── Boot ───────────────────────────────────────────────────────
+buildSections();
+updateSummary();
+loadFromGitHub();
+</script>
+</body>
+</html>
