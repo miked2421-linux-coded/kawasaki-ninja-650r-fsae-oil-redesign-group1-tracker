@@ -26,7 +26,10 @@
     "metric": "PSI under lateral G",
     "target": "> 10 psi sustained",
     "notes": "Skidpad / endurance conditions",
-    "assigned": []
+    "assigned": [
+      "Michael Diez",
+      "Gabriel Hernandez"
+    ]
   },
   "4": {
     "status": "Blocked",
