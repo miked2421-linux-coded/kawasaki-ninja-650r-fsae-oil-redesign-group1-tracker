@@ -1,6 +1,6 @@
 {
   "1": {
-    "status": "In Progress",
+    "status": "Not Started",
     "date": "Mar 24, 2026",
     "metric": "PSI",
     "target": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¥ 8 psi per 1000 RPM",
@@ -16,7 +16,7 @@
     "assigned": []
   },
   "3": {
-    "status": "Complete",
+    "status": "Not Started",
     "date": "Mar 25, 2026",
     "metric": "PSI under lateral G",
     "target": "> 10 psi sustained",
@@ -26,7 +26,7 @@
     ]
   },
   "4": {
-    "status": "Blocked",
+    "status": "Not Started",
     "date": "Mar 25, 2026",
     "metric": "ÃÂÃÂÃÂÃÂ°C",
     "target": "Within OEM safe range",
@@ -46,8 +46,8 @@
     ]
   },
   "6": {
-    "status": "In Progress",
-    "date": "",
+    "status": "Not Started",
+    "date": "Mar 25, 2026",
     "metric": "Visual / sensor",
     "target": "No cavitation / starvation",
     "notes": "Internal baffle / ramp effectiveness",
