@@ -52,7 +52,10 @@
     "metric": "Visual / sensor",
     "target": "No cavitation / starvation",
     "notes": "Internal baffle / ramp effectiveness",
-    "assigned": []
+    "assigned": [
+      "Agustin Munoz",
+      "Brice Sisk"
+    ]
   },
   "7": {
     "status": "Not Started",
