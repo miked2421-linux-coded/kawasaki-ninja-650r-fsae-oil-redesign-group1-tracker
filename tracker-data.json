@@ -21,9 +21,7 @@
     "metric": "PSI under lateral G",
     "target": "> 10 psi sustained",
     "notes": "Skidpad / endurance conditions",
-    "assigned": [
-      "Gabriel Hernandez"
-    ]
+    "assigned": []
   },
   "4": {
     "status": "Not Started",
@@ -31,9 +29,7 @@
     "metric": "ÃÂÃÂÃÂÃÂ°C",
     "target": "Within OEM safe range",
     "notes": "Monitor during on-engine runs",
-    "assigned": [
-      "Nicholas Gonzalez"
-    ]
+    "assigned": []
   },
   "5": {
     "status": "Not Started",
@@ -41,9 +37,7 @@
     "metric": "L/min",
     "target": "Matches design spec ÃÂÃÂÃÂÃÂ±5%",
     "notes": "Driven by balancing shaft extension",
-    "assigned": [
-      "Agustin Munoz"
-    ]
+    "assigned": []
   },
   "6": {
     "status": "Not Started",
@@ -51,11 +45,7 @@
     "metric": "Visual / sensor",
     "target": "No cavitation / starvation",
     "notes": "Internal baffle / ramp effectiveness",
-    "assigned": [
-      "Agustin Munoz",
-      "Brice Sisk",
-      "Gabriel Hernandez"
-    ]
+    "assigned": []
   },
   "7": {
     "status": "Not Started",
@@ -63,22 +53,15 @@
     "metric": "Pressure / visual test",
     "target": "Zero leaks",
     "notes": "Post-assembly; all TIG welds and ported fittings",
-    "assigned": [
-      "Brice Sisk",
-      "Michael Diez"
-    ]
+    "assigned": []
   },
   "8": {
-    "status": "In Progress",
-    "date": "",
+    "status": "Not Started",
+    "date": "Mar 25, 2026",
     "metric": "Foam visual observation",
     "target": "No aeration",
     "notes": "Pump oil through reservoir, observe at outlet",
-    "assigned": [
-      "Michael Diez",
-      "Nicholas Gonzalez",
-      "Agustin Munoz"
-    ]
+    "assigned": []
   },
   "9": {
     "status": "Not Started",
