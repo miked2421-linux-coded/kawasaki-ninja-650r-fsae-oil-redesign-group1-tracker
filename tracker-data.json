@@ -5,10 +5,7 @@
     "metric": "PSI",
     "target": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¥ 8 psi per 1000 RPM",
     "notes": "RPM-dependent; scaled from Kawasaki 650R data",
-    "assigned": [
-      "Gabriel Hernandez",
-      "Agustin Munoz"
-    ]
+    "assigned": []
   },
   "2": {
     "status": "Not Started",
