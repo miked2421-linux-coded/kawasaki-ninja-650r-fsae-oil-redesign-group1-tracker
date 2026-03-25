@@ -80,7 +80,11 @@
     "metric": "Foam visual observation",
     "target": "No aeration",
     "notes": "Pump oil through reservoir, observe at outlet",
-    "assigned": []
+    "assigned": [
+      "Michael Diez",
+      "Nicholas Gonzalez",
+      "Agustin Munoz"
+    ]
   },
   "9": {
     "status": "Not Started",
