@@ -34,7 +34,9 @@
     "metric": "ÃÂÃÂÃÂÃÂ°C",
     "target": "Within OEM safe range",
     "notes": "Monitor during on-engine runs",
-    "assigned": []
+    "assigned": [
+      "Nicholas Gonzalez"
+    ]
   },
   "5": {
     "status": "Not Started",
