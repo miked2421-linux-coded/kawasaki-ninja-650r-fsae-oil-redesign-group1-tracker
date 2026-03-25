@@ -24,8 +24,8 @@
     "assigned": []
   },
   "4": {
-    "status": "Not Started",
-    "date": "",
+    "status": "Blocked",
+    "date": "Mar 25, 2026",
     "metric": "ÃÂÃÂÃÂÃÂ°C",
     "target": "Within OEM safe range",
     "notes": "Monitor during on-engine runs",
