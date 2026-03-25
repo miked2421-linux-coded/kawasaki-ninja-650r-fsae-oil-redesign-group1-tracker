@@ -69,7 +69,9 @@
     "metric": "Pressure / visual test",
     "target": "Zero leaks",
     "notes": "Post-assembly; all TIG welds and ported fittings",
-    "assigned": []
+    "assigned": [
+      "Brice Sisk"
+    ]
   },
   "8": {
     "status": "In Progress",
