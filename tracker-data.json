@@ -13,9 +13,7 @@
     "metric": "PSI",
     "target": "> 30 psi",
     "notes": "Key success metric from stakeholder requirements",
-    "assigned": [
-      "Brice Sisk"
-    ]
+    "assigned": []
   },
   "3": {
     "status": "Complete",
@@ -24,7 +22,6 @@
     "target": "> 10 psi sustained",
     "notes": "Skidpad / endurance conditions",
     "assigned": [
-      "Michael Diez",
       "Gabriel Hernandez"
     ]
   },
