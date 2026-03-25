@@ -44,7 +44,9 @@
     "metric": "L/min",
     "target": "Matches design spec ÃÂÃÂÃÂÃÂ±5%",
     "notes": "Driven by balancing shaft extension",
-    "assigned": []
+    "assigned": [
+      "Agustin Munoz"
+    ]
   },
   "6": {
     "status": "In Progress",
