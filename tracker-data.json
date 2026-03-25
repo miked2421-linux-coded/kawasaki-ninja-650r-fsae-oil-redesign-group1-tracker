@@ -13,7 +13,9 @@
     "metric": "PSI",
     "target": "> 30 psi",
     "notes": "Key success metric from stakeholder requirements",
-    "assigned": []
+    "assigned": [
+      "Brice Sisk"
+    ]
   },
   "3": {
     "status": "Complete",
